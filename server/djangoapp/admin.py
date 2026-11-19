@@ -1,13 +1,23 @@
-# from django.contrib import admin
-# from .models import related models
+from django.contrib import admin
+from .models import CarMake, CarModel
 
 
-# Register your models here.
+# Opcional: permite editar los modelos de coche dentro de la marca
+class CarModelInline(admin.StackedInline):
+    model = CarModel
+    extra = 1
 
-# CarModelInline class
 
-# CarModelAdmin class
+class CarModelAdmin(admin.ModelAdmin):
+    list_display = ('name', 'car_make', 'type', 'year', 'dealer_id')
+    list_filter = ('car_make', 'type', 'year')
+    search_fields = ('name',)
 
-# CarMakeAdmin class with CarModelInline
 
-# Register models here
+class CarMakeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'country', 'founded_year')
+    inlines = [CarModelInline]
+
+
+admin.site.register(CarMake, CarMakeAdmin)
+admin.site.register(CarModel, CarModelAdmin)
